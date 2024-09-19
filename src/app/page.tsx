@@ -1,101 +1,201 @@
-import Image from "next/image";
-
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const colorsUsedInVSCODE = Object.entries(VESPER_PALETTE).reduce(
+    (colorDictionary, [key, value]) => {
+      colorDictionary[value] = [...(colorDictionary[value] || []), key];
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      return colorDictionary;
+    },
+    {} as Record<string, string[]>
   );
+
+  // console.log(
+
+  // );
+
+  // return (
+  //   <div>
+  //     {Object.keys(colorsUsedInVSCODE).map((color) => {
+  //       return (
+  //         <div key={color} className="flex gap-2 items-center">
+  //           <div style={{ background: color }} className="w-4 h-4" />
+  //           <div>{color}</div>
+  //         </div>
+  //       );
+  //     })}
+  //   </div>
+  // );
+  //
+  // return (
+  //   <div>
+  //     {Object.entries(baseColors).map(([label, hex]) => {
+  //       return (
+  //         <div key={label} className="flex gap-2 items-center">
+  //           <div style={{ background: hex }} className="w-4 h-4" />
+  //           <div>
+  //             {label} - {hex}
+  //           </div>
+  //         </div>
+  //       );
+  //     })}
+  //   </div>
+  // );
+
+  const opacity = opacityToHex(
+    calculateOpacity(
+      baseColors["backgound-base"],
+      baseColors["foreground-base"],
+      baseColors["foreground-subtle"]
+    )
+  );
+  const color = `${baseColors["foreground-base"]}${opacity}`;
+  // return color;
+  return blendColors(color, baseColors["backgound-base"]);
+}
+
+const baseColors = {
+  "backgound-base": "#101010",
+  "background-subtle": "",
+
+  "foreground-subtle": "#A0A0A0",
+  "foreground-base": "#FFFFFF",
+};
+
+const VESPER_PALETTE = {
+  "editor.background": "#101010",
+  "editor.foreground": "#FFF",
+  "editor.selectionBackground": "#FFFFFF25",
+  "editorError.foreground": "#FF8080",
+  "editorWarning.foreground": "#FFC799",
+  "editorGutter.addedBackground": "#99FFE4",
+  "editorBracketHighlight.foreground6": "#A0A0A0",
+
+  "editorLineNumber.foreground": "#505050",
+  "editorGutter.deletedBackground": "#FF8080",
+
+  "editorInlayHint.foreground": "#A0A0A0",
+  "editorInlayHint.background": "#1C1C1C",
+  // Sidebar
+  "sideBarTitle.foreground": "#A0A0A0",
+  "sideBarSectionHeader.foreground": "#A0A0A0",
+  // Activity bar
+  "activityBar.foreground": "#A0A0A0",
+  "activityBarBadge.foreground": "#000",
+  // Title bar
+  "titleBar.activeForeground": "#7E7E7E",
+  "titleBar.inactiveForeground": "#707070",
+  // Tab
+  "tab.activeBackground": "#161616",
+  // Status bar
+  "statusBar.debuggingBackground": "#FF7300",
+  "statusBar.foreground": "#A0A0A0",
+  "statusBarItem.remoteForeground": "#000",
+  // Change explorer active item color
+  "list.inactiveSelectionBackground": "#232323",
+  // Global
+  "badge.foreground": "#000",
+  "button.hoverBackground": "#FFCFA8",
+  "button.foreground": "#000",
+  "icon.foreground": "#A0A0A0",
+  "input.background": "#1C1C1C",
+  "list.activeSelectionBackground": "#232323",
+  "list.hoverBackground": "#282828",
+  "list.errorForeground": "#FF8080",
+  "selection.background": "#666",
+  // Brackets
+  "editorBracketHighlight.foreground1": "#A0A0A0",
+  "editorBracketHighlight.foreground2": "#A0A0A0",
+  "editorBracketHighlight.foreground3": "#A0A0A0",
+  "editorBracketHighlight.foreground4": "#A0A0A0",
+  "editorBracketHighlight.foreground5": "#A0A0A0",
+  "editorBracketHighlight.unexpectedBracket.foreground": "#FF8080",
+  // Links
+  "textLink.activeForeground": "#FFCFA8",
+  // Tooltips
+  "editorHoverWidget.background": "#161616",
+  "editorHoverWidget.border": "#282828",
+  // Scrollbar
+  "scrollbarSlider.background": "#34343480",
+  "scrollbarSlider.hoverBackground": "#343434",
+};
+
+// utils
+
+function calculateOpacity(
+  background: string,
+  source: string,
+  target: string
+): number {
+  // Convert hex to RGB
+  const hexToRgb = (hex: string): [number, number, number] => {
+    const bigint = parseInt(hex.slice(1), 16);
+    return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
+  };
+
+  const [bR, bG, bB] = hexToRgb(background);
+  const [sR, sG, sB] = hexToRgb(source);
+  const [tR, tG, tB] = hexToRgb(target);
+
+  // Calculate opacity for each channel
+  const calcOpacityChannel = (b: number, s: number, t: number): number => {
+    if (s === t) return 1;
+    return Math.max(0, Math.min(1, (t - b) / (s - b)));
+  };
+
+  const opacityR = calcOpacityChannel(bR, sR, tR);
+  const opacityG = calcOpacityChannel(bG, sG, tG);
+  const opacityB = calcOpacityChannel(bB, sB, tB);
+
+  // Return the average opacity
+  return (opacityR + opacityG + opacityB) / 3;
+}
+
+function opacityToHex(opacity: number): string {
+  // Ensure opacity is between 0 and 1
+  opacity = Math.max(0, Math.min(1, opacity));
+
+  // Convert to 0-255 range and then to hex
+  const alphaInt = Math.round(opacity * 255);
+  const alphaHex = alphaInt.toString(16).padStart(2, "0");
+
+  return alphaHex.toUpperCase();
+}
+
+function blendColors(foreground: string, background: string): string {
+  // Helper function to convert hex to RGB
+  const hexToRgb = (hex: string): [number, number, number] => {
+    const bigint = parseInt(hex.slice(1), 16);
+    return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
+  };
+
+  // Helper function to convert RGB to hex
+  const rgbToHex = (r: number, g: number, b: number): string => {
+    return (
+      "#" +
+      [r, g, b]
+        .map((x) => {
+          const hex = Math.round(x).toString(16);
+          return hex.length === 1 ? "0" + hex : hex;
+        })
+        .join("")
+    );
+  };
+
+  // Extract RGB and alpha values
+  const [fR, fG, fB] = hexToRgb(foreground.slice(0, 7));
+  const alpha = parseInt(foreground.slice(7), 16) / 255;
+  // console.log(alpha);
+  // console.log(foreground);
+  const [bR, bG, bB] = hexToRgb(background);
+
+  // Blend colors
+  const blendChannel = (fC: number, bC: number) => {
+    return Math.round(fC * alpha + bC * (1 - alpha));
+  };
+
+  const rBlend = blendChannel(fR, bR);
+  const gBlend = blendChannel(fG, bG);
+  const bBlend = blendChannel(fB, bB);
+
+  // Convert back to hex
+  return rgbToHex(rBlend, gBlend, bBlend);
 }
